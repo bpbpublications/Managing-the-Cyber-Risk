@@ -1,2 +1,2 @@
-# Mastering the Cyber Fortress
-Mastering the Cyber Fortress, by BPB Publications
+# Managing the Cyber Risk
+Managing the Cyber Risk, by BPB Publications
