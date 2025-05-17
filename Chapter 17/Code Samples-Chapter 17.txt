@@ -1,0 +1,292 @@
+Code Sample 1:-
+
+# mermaid code of designing Asset Inventory flowchart:
+
+	graph TD
+	    A[Identify Assets] --> B[Categorize Asset Type]
+	    B --> C[Assign Business Impact]
+	    C --> D[Document Asset Details]
+	    D --> E[Store in Inventory Database]
+	    E --> F[Regular Updates & Review]
+	    F --> G[Trigger Patch Management if Needed]
+
+
+
+Code Sample 2:-
+
+# Automating asset inventory using Python
+
+	import csv
+	import requests
+	
+	# Sample asset list
+	assets = [
+	    {"name": "Web Server 1", "type": "Server", "ip": "192.168.1.10", "impact": "High"},
+	    {"name": "HR Database", "type": "Database", "ip": "db.hr.corp.com", "impact": "Critical"},
+	]
+	
+	# CMDB API endpoint (Replace with real API URL)
+	CMDB_API_URL = "https://cmdb.example.com/api/assets"
+	
+	def update_cmdb(asset):
+	    try:
+	        response = requests.post(CMDB_API_URL, json=asset)
+	        response.raise_for_status()
+	        print(f"Updated CMDB: {asset['name']}")
+	    except requests.exceptions.RequestException as e:
+	        print(f"Error updating CMDB: {e}")
+	
+	# Save assets to CSV & update CMDB
+	with open("asset_inventory.csv", "w", newline="") as file:
+	    writer = csv.DictWriter(file, fieldnames=["name", "type", "ip", "impact"])
+	    writer.writeheader()
+	    for asset in assets:
+	        writer.writerow(asset)
+	        update_cmdb(asset)
+	
+	print("Asset inventory updated successfully!")
+
+
+
+Code Sample 3:-
+
+# mermaid code of designing Vulnerability Risk Assessment flowchart:
+
+	graph TD
+	    A[Perform Vulnerability Scan] --> B[Identify Vulnerabilities]
+	    B --> C[Assess Risk (Severity & Exploitability)]
+	    C --> D[Prioritize Vulnerabilities]
+	    D --> E[Assign to Remediation Team]
+	    E --> F[Mitigate or Patch]
+	    F --> G[Re-scan and Validate Fix]
+
+
+
+Code Sample 4:-
+
+# Automated vulnerability scanning with Nmap
+
+	import nmap
+	import json
+	
+	def parse_vulnerabilities(scan_result):
+	    vulnerabilities = []
+	    for host in scan_result.all_hosts():
+	        for port, details in scan_result[host].get('tcp', {}).items():
+	            if 'script' in details:
+	                for script, output in details['script'].items():
+	                    vulnerabilities.append({"host": host, "port": port, "vulnerability": script, "details": output})
+	    return vulnerabilities
+	
+	# Perform scan
+	scanner = nmap.PortScanner()
+	target_host = "192.168.1.10"
+	
+	try:
+	    scanner.scan(target_host, arguments="--script vuln")
+	    vuln_results = parse_vulnerabilities(scanner)
+    
+	    # Save results to JSON file
+	    with open("vulnerability_scan_results.json", "w") as json_file:
+	        json.dump(vuln_results, json_file, indent=4)
+	
+	    print(f"Scan completed. Found {len(vuln_results)} vulnerabilities.")
+	except Exception as e:
+	    print(f"Scanning error: {e}")
+
+
+Code Sample 5:-
+
+# mermaid code for patch management process plan flowchart
+
+	graph TD
+	    A[Monitor for New Patches] --> B[Identify Affected Systems]
+	    B --> C[Test Patches in Staging]
+	    C --> D[Schedule Deployment]
+	    D --> E[Deploy Patches]
+	    E --> F[Verify Patch Success]
+	    F --> G[Monitor for Issues]
+
+
+Code Sample 6:-
+
+# Automating patch management with Ansible
+
+	- name: Apply security updates (Linux)
+	  hosts: all
+	  become: yes
+	  tasks:
+	    - name: Update all packages
+	      apt:
+	        upgrade: dist
+	        update_cache: yes
+
+# PowerShell code to install updates on Windows
+
+	# Install Windows Updates
+	Install-WindowsUpdate -MicrosoftUpdate -AcceptAll -AutoReboot
+
+
+Code Sample 7:-
+
+# mermaid code of designing Security Awareness Program flowchart:
+
+	graph TD
+	    A[Identify Training Needs] --> B[Select Training Modules]
+	    B --> C[Assign Employees to Training]
+	    C --> D[Deliver Training (Online/In-person)]
+	    D --> E[Measure Training Completion]
+	    E --> F[Conduct Phishing Simulations]
+	    F --> G[Analyze Training Effectiveness]
+	    G --> H[Repeat & Improve Training]
+
+
+
+Code Sample 8:-
+
+# Automating phishing simulations with Python
+
+	import smtplib
+	
+	sender = "security@company.com"
+	receiver = "employee@company.com"
+	subject = "URGENT: Password Reset Required!"
+	message = """\
+	Subject: {subject}
+	Dear User,
+	
+	Your account security checkup is pending. Click the link below to verify your credentials:
+	
+	http://fake-security-check.com
+	
+	Best,
+	IT Security
+	"""
+	
+	with smtplib.SMTP("smtp.company.com") as server:
+	    server.sendmail(sender, receiver, message.format(subject=subject))
+	    
+	print("Phishing simulation email sent!")
+
+
+
+Code Sample 9:-
+
+# mermaid code of designing Incident Response Plan flowchart:
+
+	graph TD
+	    A[Detect Incident] --> B[Analyze and Classify Severity]
+	    B --> C[Notify Response Team]
+	    C --> D[Contain Threat]
+	    D --> E[Eradicate Root Cause]
+	    E --> F[Recover Affected Systems]
+	    F --> G[Conduct Post-Incident Analysis]
+
+
+
+Code Sample 10:-
+
+# Automating incident logging
+
+	import logging
+	
+	# Configure logging
+	logging.basicConfig(filename="incident_log.txt", level=logging.WARNING)
+	
+	# Example function to log incidents
+	def log_incident(incident_type, description):
+	    logging.warning(f"Incident: {incident_type} | Description: {description}")
+	
+	# Log an incident
+	log_incident("Ransomware", "Malicious file detected on HR database.")
+	print("Incident logged and SOC notified.")
+
+
+Code Sample 11:-
+
+# mermaid code for Vulnerability Scanning workflow:
+
+	graph TD
+	    A[Define Scanning Scope] --> B[Select Scanning Tool]
+	    B --> C[Schedule Regular Scans]
+	    C --> D[Update Scanner with Latest Vulnerabilities]
+	    D --> E[Run Initial Scan]
+	    E --> F[Analyze and Validate Findings]
+	    F --> G[Prioritize Critical Vulnerabilities]
+	    G --> H[Generate and Share Reports]
+	    H --> I[Initiate Remediation Process]
+
+
+
+Code Sample 12:-
+
+# mermaid code for Patch deployment workflow:
+
+	graph TD
+	    A[Identify Critical Patches] --> B[Test Patches in Staging]
+	    B --> C[Schedule Deployment Window]
+	    C --> D[Backup Systems Before Deployment]
+	    D --> E[Deploy Patches]
+	    E --> F[Verify Patch Installation]
+	    F --> G[Monitor for Post-Patch Issues]
+	    G --> H[Document and Report Patch Status]
+
+
+Code Sample 13:-
+
+# mermaid code for Third-party risk assessment workflow:
+
+	graph TD
+	    A[Identify Critical Vendors] --> B[Request Security Policies]
+	    B --> C[Review Vendor Compliance Certifications]
+	    C --> D[Perform Risk Assessment]
+	    D --> E[Evaluate Past Security Incidents]
+	    E --> F[Ensure Contract Includes Security Clauses]
+	    F --> G[Monitor Vendor Security Practices Regularly]
+
+
+Code Sample 14:-
+
+# Vendor risk assessment scoring system
+
+	import requests
+	
+	# API endpoint for third-party risk scoring (BitSight/SecurityScorecard)
+	API_URL = "https://api.securityscorecard.com/companies/example.com"
+	
+	headers = {
+	    "Authorization": "Bearer YOUR_API_KEY"
+	}
+	
+	try:
+	    response = requests.get(API_URL, headers=headers)
+	    response.raise_for_status()
+	    data = response.json()
+	    print(f"Vendor Risk Score: {data['score']}/100")
+	except requests.exceptions.RequestException as e:
+	    print(f"Error fetching vendor risk score: {e}")
+
+
+Code Sample 15:-
+
+# mermaid code for Security awareness training workflow:
+
+	graph TD
+	    A[Identify Training Needs] --> B[Develop Training Content]
+	    B --> C[Choose Training Platform]
+	    C --> D[Assign Training to Employees]
+	    D --> E[Track Completion Rates]
+	    E --> F[Conduct Phishing Simulations]
+	    F --> G[Analyze Results and Improve Training]
+
+
+Code Sample 16:-
+
+# mermaid code for Incident Response drill workflow
+
+	graph TD
+	    A[Define Incident Scenarios] --> B[Assign Response Teams]
+	    B --> C[Simulate Attack in a Controlled Environment]
+	    C --> D[Analyze Team Response]
+	    D --> E[Identify Gaps in Incident Handling]
+	    E --> F[Improve Incident Response Plan]

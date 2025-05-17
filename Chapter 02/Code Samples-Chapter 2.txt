@@ -1,0 +1,67 @@
+Code Sample 1:-
+
+# Vulnerable Code (PHP)
+
+	<?php
+	// Vulnerable code example
+	$username = $_POST['username'];
+	$password = $_POST['password'];
+	$query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+	$result = mysqli_query($conn, $query);
+	?>
+
+# Secure Code
+
+	<?php
+	// Secure code example using prepared statements
+	$username = $_POST['username'];
+	$password = $_POST['password'];
+	$stmt = $conn->prepare("SELECT * FROM users WHERE username=? AND password=?");
+	$stmt->bind_param("ss", $username, $password);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	?>
+
+
+Code Sample 2:-
+
+# Vulnerable Code (without input sanitization)
+
+	<html> <!-- Begins the HTML document -->
+	<head> <!-- Starts the document head -->
+	<title>Vulnerable Page</title> <!-- Page title shown in the browser tab -->
+	</head> <!-- Closes the head section -->
+	<body> <!-- Starts the body of the HTML document -->
+	      <form action="submit.php" method="post"> <!-- Form sends data to submit.php via POST -->
+	          <label for="comment">Comment:</label> <!-- Label for the comment input field -->
+	          <input type="text" id="comment" name="comment"> <!-- Text input for user comments -->
+	         <input type="submit" value="Submit"> <!-- Submit button to send form data -->
+	     </form> <!-- Closes the form -->
+	</body> <!-- Closes the body of the HTML document -->
+	</html> <!-- Ends the HTML document -->
+
+
+# Secure Code (with input sanitization)
+
+<!DOCTYPE html> <!-- Defines the document type as HTML5 -->
+	 <html> <!-- Begins the HTML document -->
+	 <head> <!-- Starts the document head -->
+	     <title>Secure Page</title> <!-- Page title shown in the browser tab -->
+	 </head> <!-- Closes the head section -->
+	 <body> <!-- Starts the body of the HTML document -->
+	     <form action="submit.php" method="post"> <!-- Form sends data to submit.php via POST -->
+	         <label for="comment">Comment:</label> <!-- Label for the comment input field -->
+	         <input type="text" id="comment" name="comment"> <!-- Text input for user comments -->
+	         <input type="submit" value="Submit"> <!-- Submit button to send form data -->
+	     </form> <!-- Closes the form -->
+	     <script> <!-- Begins JavaScript for input sanitization -->
+	         document.getElementById('comment').value = sanitize(document.getElementById('comment').value); 
+	               <!-- Sanitizes input by replacing potentially harmful characters -->
+	         function sanitize(input) { <!-- Defines the sanitize function -->
+	             return input.replace(/</g, "&lt;").replace(/>/g, "&gt;"); 
+	                <!-- Replaces '<' with '&lt;' and '>' with '&gt;' to prevent XSS -->
+	         }
+	    </script> <!-- Ends JavaScript -->
+	 </body> <!-- Closes the body of the HTML document -->
+	 </html> <!-- Ends the HTML document -->
+

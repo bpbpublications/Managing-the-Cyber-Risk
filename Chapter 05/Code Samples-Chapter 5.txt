@@ -1,0 +1,78 @@
+Code Sample 1:-
+
+# Automating Asset Discovery
+
+	import requests
+	
+	# CMDB Asset Retrieval Function
+	def get_assets_from_cmdb(api_url, token):
+	    headers = {"Authorization": f"Bearer {token}"}
+	    response = requests.get(api_url, headers=headers)
+	    if response.status_code == 200:
+	        return response.json()
+	    else:
+	        print("Error retrieving data")
+	        return None
+	
+	api_url = "https://cmdb.example.com/api/assets"
+	token = "your_api_token_here"
+	assets = get_assets_from_cmdb(api_url, token)
+	
+	for asset in assets:
+	    print(f"Asset ID: {asset['id']}, Name: {asset['name']}")
+
+
+Code Sample 2:-
+
+# Calculating CVSS score
+
+	def calculate_cvss_base_score(av, ac, pr, ui, c, i, a):
+	    # Base score formula constants
+	    AV_MAP = {'N': 0.85, 'A': 0.62, 'L': 0.55, 'P': 0.2}
+	    AC_MAP = {'L': 0.77, 'H': 0.44}
+	    PR_MAP = {'N': 0.85, 'L': 0.62, 'H': 0.27}
+	    UI_MAP = {'N': 0.85, 'R': 0.62}
+	    CI_MAP = {'N': 0.0, 'L': 0.22, 'H': 0.56}
+	
+	    # Calculate the impact score
+	    impact = 1 - (1 - CI_MAP[c]) * (1 - CI_MAP[i]) * (1 - CI_MAP[a])
+	    
+	    # Calculate the exploitability score
+	    exploitability = 8.22 * AV_MAP[av] * AC_MAP[ac] * PR_MAP[pr] * UI_MAP[ui]
+	    
+	    # Final base score formula
+	    base_score = min(impact + exploitability, 10)
+	    
+	    return round(base_score, 2)
+	
+	# Example CVSS characteristics
+	attack_vector = 'N'  # Network
+	attack_complexity = 'L'  # Low
+	privileges_required = 'N'  # None
+	user_interaction = 'R'  # Required
+	confidentiality = 'H'  # High
+	integrity = 'L'  # Low
+	availability = 'N'  # None
+	
+	# Calculate the CVSS base score
+	cvss_score = calculate_cvss_base_score(attack_vector, attack_complexity, privileges_required, user_interaction, confidentiality, integrity, availability)
+	print(f"CVSS Base Score: {cvss_score}")
+
+
+Code Sample 3:-
+
+# Prioritize assets using CVSS score
+
+	# Sample code to calculate CVSS score for an asset
+	def calculate_cvss(base_score, exploitability, impact):
+	    return base_score * (exploitability / 10) * (impact / 10)
+	
+	# Example parameters for an asset
+	base_score = 7.5
+	exploitability = 8.0
+	impact = 6.5
+	
+	cvss_score = calculate_cvss(base_score, exploitability, impact)
+	print(f"CVSS Score: {cvss_score}")
+
+

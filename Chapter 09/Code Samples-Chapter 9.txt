@@ -1,0 +1,39 @@
+Code Sample 1:-
+
+# Phishing simulation script
+
+	import smtplib
+	from email.mime.multipart import MIMEMultipart
+	from email.mime.text import MIMEText
+	
+	def send_phishing_email(target_email, phish_type="Password Reset"):
+	    subject = f"Important: {phish_type} Required"
+	    body = f"""
+	    Dear Employee,
+	
+	    We have detected suspicious activity on your account. Please reset your password by clicking the link below:
+	    http://fake-password-reset.com
+	
+	    If you have any questions, contact IT support.
+	
+	    Sincerely,
+	    IT Support
+	    """
+	    msg = MIMEMultipart()
+	    msg['From'] = "it-support@company.com"
+	    msg['To'] = target_email
+	    msg['Subject'] = subject
+	    msg.attach(MIMEText(body, 'plain'))
+	
+	    try:
+	        with smtplib.SMTP("smtp.company.com") as server:
+	            server.sendmail(msg['From'], msg['To'], msg.as_string())
+	        print(f"Phishing simulation email sent to {target_email}")
+	    except Exception as e:
+	        print(f"Error sending email: {e}")
+	
+	# Example usage:
+	send_phishing_email("employee@company.com", "Account Verification")
+
+
+

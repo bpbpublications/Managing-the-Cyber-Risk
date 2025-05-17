@@ -1,0 +1,127 @@
+Code Sample 1:- 
+
+# automation code for AWS systems manager
+
+	import boto3
+	
+	ssm_client = boto3.client('ssm')
+	response = ssm_client.create_patch_baseline(
+	    Name='MyAWSBaseline',
+	    OperatingSystem='AmazonLinux2',
+	    ApprovalRules={
+	        'PatchRules': [
+	            {
+	                'PatchFilterGroup': {
+	                    'PatchFilters': [{'Key': 'PRODUCT', 'Values': ['AmazonLinux2']}]
+	                },
+	                'ComplianceLevel': 'CRITICAL',
+	                'ApproveAfterDays': 7,
+	            }
+	        ]
+	    },
+	    ApprovedPatchesComplianceLevel='CRITICAL'
+	)
+	print("Patch Baseline ID:", response['BaselineId'])
+
+
+
+Code Sample 2:-
+
+# Sample Firewalls Rule code
+
+	# allow traffic from the Finance subnet to the HR subnet
+	iptables -A FORWARD -s 192.168.1.0/24 -d 192.168.2.0/24 -j ACCEPT
+	
+	# Permit traffic from the HR subnet to Finance subnet
+	iptables -A FORWARD -s 192.168.2.0 /24 -d 192.168.1.0 /24 -j ACCEPT
+
+	# Block all other traffic between the segments
+	iptables -A FORWARD -j DROP
+
+
+Code Sample 3:-
+
+# Code to configure VLAN
+
+	Configure VLANs
+	vlan 10
+	name Finance
+	exit
+	VLAN 20
+	Name: HR
+	quit
+	
+	Assign ports to VLANs
+	interface FastEthernet0/1
+	switchport mode access
+	switchport access vlan 10
+	quit
+	
+	interface FastEthernet0/2
+	switchport mode access
+	switchport access vlan 20
+	exit
+
+
+Code Sample 4:-
+
+# Code to disable vulnerable service (PowerShell)
+
+	#Disable a vulnerable service 
+	Stop-Service -Name "VulnerableServiceName" -Force 
+	
+	Set-Service -Name "VulnerableServiceName" -StartupType Disabled 
+
+
+Code Sample 5:-
+
+# Prioritization of vulnerabilities based on their CVSS score
+
+	#Example Python script to prioritize vulnerabilities
+	import pandas as pd
+	
+	#Sample Vulnerability Scans
+	data =
+	'Vulnerability': ['Vuln A', 'Vuln B', 'Vuln C'],
+	'CVSS Score': [9.8, 5.0, 7.5],  # Scores are from CVSS
+	'Asset Value': [10, 5, 8]  # Example asset value
+	}
+	
+	#Creation of DataFrame
+	df = pd.DataFrame(data)
+	
+	#Calculate Priority - simple formula: CVSS Score * Asset Value
+	df['Priority'] = df['CVSS Score'] * df['Asset Value']
+	
+	# Sort by Priority
+	df_sorted = df.sort_values(by='Priority', ascending=False)
+	
+	print("Prioritised Vulnerabilities:")
+	print(df_sorted[['Vulnerability', 'CVSS Score', 'Asset Value', 'Priority']])
+
+
+
+Code Sample 6:-
+
+# Automating deployment of patch (Powershell)
+
+	#Sample PowerShell script for Automatic Deployment of patch
+	# Ensure script is ran with administrative privs
+	
+	Import the necessary module
+	Import-Module PSWindowsUpdate
+	
+	#UPDATE Available check
+	$updates = Get-WindowsUpdate
+	
+	Install available updates
+	
+	if ($updates) {
+	
+	Write-Host "Installing updates."
+	
+	Install-WindowsUpdate -AcceptAll -AutoReboot
+	
+	} else { Write-Host "No updates available." } 
+
+

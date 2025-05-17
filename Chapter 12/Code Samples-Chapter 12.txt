@@ -1,0 +1,144 @@
+Code Sample 1:-
+
+# SLA based time to remediate
+
+import pandas as pd
+from datetime import datetime, timedelta
+# Sample vulnerability data
+data = {
+    "vulnerability_id": [101, 102, 103, 104],  # Unique identifier for each vulnerability
+    "severity": ["Critical", "High", "Medium", "Low"],  # Severity level of the vulnerability
+    "identified_date": ["2024-06-01", "2024-06-05", "2024-06-10", "2024-06-15"],  # Date when the vulnerability was discovered
+    "remediated_date": ["2024-06-02", "2024-06-12", "2024-06-28", "2024-07-20"]  # Date when the vulnerability was fixed
+}
+# SLA timeframes for different severity levels
+sla_timeframes = {
+    "Critical": 2,  # SLA for critical vulnerabilities is 2 days
+    "High": 7,     # SLA for high vulnerabilities is 7 days
+    "Medium": 14,  # SLA for medium vulnerabilities is 14 days
+    "Low": 30      # SLA for low vulnerabilities is 30 days
+}
+# Create a DataFrame and convert date strings to datetime objects
+df = pd.DataFrame(data)
+df['identified_date'] = pd.to_datetime(df['identified_date'])  # Convert identified_date to datetime objects
+df['remediated_date'] = pd.to_datetime(df['remediated_date'])  # Convert remediated_date to datetime objects
+# Calculate the actual time taken to remediate each vulnerability
+df['time_to_remediate'] = (df['remediated_date'] - df['identified_date']).dt.days  # Calculate the number of days 
+# Function to check if the remediation time meets the SLA
+def check_sla(severity, time_to_remediate):
+    """
+    Checks if the remediation time for a vulnerability meets the defined SLA.
+    Args:
+        severity: Severity level of the vulnerability.
+        time_to_remediate: Number of days taken to remediate the vulnerability.
+    Returns:
+        "Compliant" if the remediation time is within the SLA, "Non-Compliant" otherwise.
+    """
+    return "Compliant" if time_to_remediate <= sla_timeframes[severity] else "Non-Compliant"
+# Apply the check_sla function to each row in the DataFrame
+df['sla_status'] = df.apply(lambda x: check_sla(x['severity'], x['time_to_remediate']), axis=1) 
+# Print the results
+print(df[['vulnerability_id', 'severity', 'time_to_remediate', 'sla_status']])
+
+
+
+The sample output is as follows:
+
+1.	   vulnerability_id   severity  time_to_remediate    sla_status
+2.	0              101   Critical                  1    Compliant
+3.	1              102       High                  7    Compliant
+4.	2              103     Medium                 18  Non-Compliant
+5.	3              104        Low                 35  Non-Compliant
+
+
+
+Code sample 2:-
+
+# Code example for ROI calculation
+
+	# ROI Calculation for Vulnerability Management
+	
+	# Inputs
+	annual_breach_likelihood_before = 0.4  # 40% chance of a breach
+	annual_breach_likelihood_after = 0.1   # Reduced to 10% after program
+	average_breach_cost = 500000           # Cost of a single breach ($500,000)
+	program_cost = 120000                  # Total cost of the security program ($120,000)
+	efficiency_gain_hours = 400            # Hours saved annually due to faster patching
+	hourly_rate = 50                       # Average hourly wage of IT/security staff
+	
+	# Step 1: Calculate Annual Loss Expectancy (ALE)
+	ale_before = annual_breach_likelihood_before * average_breach_cost
+	ale_after = annual_breach_likelihood_after * average_breach_cost
+	breach_savings = ale_before - ale_after
+	
+	# Step 2: Calculate Efficiency Gains
+	efficiency_savings = efficiency_gain_hours * hourly_rate
+	
+	# Step 3: Calculate Total Monetary Benefit
+	total_monetary_benefit = breach_savings + efficiency_savings
+	
+	# Step 4: Calculate ROI
+	roi = ((total_monetary_benefit - program_cost) / program_cost) * 100
+	
+	# Display Results
+	print("=== Security Program ROI Calculation ===")
+	print(f"Cost Savings from Reduced Breach Risk: ${breach_savings:,.2f}")
+	print(f"Cost Savings from Efficiency Gains: ${efficiency_savings:,.2f}")
+	print(f"Total Monetary Benefit: ${total_monetary_benefit:,.2f}")
+	print(f"Total Program Cost: ${program_cost:,.2f}")
+	print(f"ROI: {roi:.2f}%")
+
+
+Code Sample 3:-
+
+# Install the matplotlib and pandas libraries
+
+	pip install matplotlib pandas
+
+# Generating a vulnerability management report
+
+	import pandas as pd
+	import matplotlib.pyplot as plt
+	
+	# Sample Data: Simulating Vulnerability Metrics
+	data = {
+	    "Month": ["Jan", "Feb", "Mar", "Apr", "May"],
+	    "Vulnerabilities Found": [120, 150, 200, 180, 140],
+	    "Vulnerabilities Remediated": [100, 130, 160, 150, 120],
+	    "MTTP (Days)": [15, 12, 10, 9, 8],
+	    "Compliance Rate (%)": [70, 75, 80, 85, 90]
+	}
+	
+	# Create a DataFrame
+	df = pd.DataFrame(data)
+	
+	# Plot Vulnerabilities Found vs Remediated
+	plt.figure(figsize=(10, 6))
+	plt.plot(df["Month"], df["Vulnerabilities Found"], marker='o', label="Vulnerabilities Found", color='red')
+	plt.plot(df["Month"], df["Vulnerabilities Remediated"], marker='o', label="Vulnerabilities Remediated", color='green')
+	plt.title("Vulnerabilities Found vs Remediated Over Time")
+	plt.xlabel("Month")
+	plt.ylabel("Number of Vulnerabilities")
+	plt.legend()
+	plt.grid()
+	plt.show()
+	
+	# Plot Mean Time to Patch (MTTP)
+	plt.figure(figsize=(10, 6))
+	plt.bar(df["Month"], df["MTTP (Days)"], color='blue')
+	plt.title("Mean Time to Patch (MTTP)")
+	plt.xlabel("Month")
+	plt.ylabel("MTTP (Days)")
+	plt.grid(axis='y')
+	plt.show()
+	
+	# Plot Compliance Rate
+	plt.figure(figsize=(10, 6))
+	plt.plot(df["Month"], df["Compliance Rate (%)"], marker='o', linestyle='--', color='purple')
+	plt.title("Patch Compliance Rate (%)")
+	plt.xlabel("Month")
+	plt.ylabel("Compliance Rate (%)")
+	plt.grid()
+	plt.show()
+
+

@@ -1,0 +1,142 @@
+Code Sample 1:-
+
+# Automated security checks
+
+	# Secure Coding Check Script
+	import re
+	
+	# List of common insecure code patterns
+	insecure_patterns = [
+	    r"exec\(.*\)",          # Detects use of 'exec' function
+	    r"eval\(.*\)",          # Detects use of 'eval' function
+	    r"pickle\.loads\(.*\)"  # Detects unsafe deserialization with 'pickle'
+	]
+	
+	# Example source code snippets
+	code_snippets = [
+	    "user_input = 'exec(\"rm -rf /\")'",  # Example of dangerous code
+	    "safe_data = eval('2 + 2')",         # Example of using eval
+	    "data = pickle.loads(serialized_data)"  # Example of unsafe deserialization
+	]
+	
+	def check_security(code_snippet):
+	    """Check for insecure code patterns."""
+	    for pattern in insecure_patterns:
+	        if re.search(pattern, code_snippet):
+	            return f"Insecure pattern detected: {pattern}"
+	    return "No insecure patterns found."
+	
+	# Analyze each code snippet
+	for snippet in code_snippets:
+	    print(f"Analyzing: {snippet}")
+	    result = check_security(snippet)
+	    print(f"Result: {result}\n")
+
+The output is as follows:
+	Analyzing: user_input = 'exec("rm -rf /")'
+	Result: Insecure pattern detected: exec\(.*\)
+	
+	Analyzing: safe_data = eval('2 + 2')
+	Result: Insecure pattern detected: eval\(.*\)
+	
+	Analyzing: data = pickle.loads(serialized_data)
+	Result: Insecure pattern detected: pickle\.loads\(.*\)
+
+
+Code Sample 2:-
+
+# Randomizing Quiz questions
+
+	import random
+	
+	questions = [
+	    {"question": "What is phishing?", "options": ["A: A fishing technique", "B: A cyberattack", "C: A network tool", "D: None of the above"], "answer": "B"},
+	    {"question": "How to recognize a malicious URL?", "options": ["A: Check for 'https'", "B: Look for odd domains", "C: Avoid shortened links", "D: All of the above"], "answer": "D"}
+	]
+	
+	def quiz():
+	    random.shuffle(questions)
+	    for q in questions:
+	        print(f"Question: {q['question']}")
+	        for idx, option in enumerate(q["options"], 1):
+	            print(f"{idx}. {option}")
+	        user_answer = input("Enter your choice (A/B/C/D): ").strip().upper()
+	        if user_answer == q["answer"]:
+	            print("Correct!\n")
+	        else:
+	            print(f"Incorrect. The correct answer is {q['answer']}.\n")
+	
+	quiz()
+
+
+Code Sample 3:- 
+
+# Monitoring Login Activity
+
+	import json
+	from collections import Counter
+	
+	# Sample login logs
+	login_logs = [
+	    '{"timestamp": "2024-12-06T12:00:00Z", "user": "jdoe", "status": "failed", "ip": "192.168.1.101"}',
+	    '{"timestamp": "2024-12-06T12:01:00Z", "user": "jdoe", "status": "failed", "ip": "192.168.1.101"}',
+	    '{"timestamp": "2024-12-06T12:02:00Z", "user": "jdoe", "status": "failed", "ip": "192.168.1.101"}',
+	    '{"timestamp": "2024-12-06T12:03:00Z", "user": "admin", "status": "failed", "ip": "203.0.113.45"}',
+	    '{"timestamp": "2024-12-06T12:04:00Z", "user": "jdoe", "status": "success", "ip": "192.168.1.101"}'
+	]
+	
+	# Threshold for failed login attempts
+	FAILED_THRESHOLD = 3
+	
+	def detect_brute_force(logs):
+	    """Detects brute force attempts based on failed login attempts."""
+	    failed_attempts = Counter()
+	
+	    for log in logs:
+	        entry = json.loads(log)
+	        if entry["status"] == "failed":
+	            failed_attempts[entry["ip"]] += 1
+	
+	            # Check if the threshold is exceeded
+	            if failed_attempts[entry["ip"]] >= FAILED_THRESHOLD:
+	                print(f"Brute force detected from IP: {entry['ip']}")
+	
+	detect_brute_force(login_logs)
+
+The output is as follows:
+	Brute force detected from IP: 192.168.1.101
+
+
+Code Sample 4:-
+
+# SIEM Alert Configuration (Splunk Query):
+
+	index=security_logs sourcetype=login_events status="failed" | stats count by user, src_ip | where count > 5
+
+
+
+Code Sample 5:-
+
+# Threat intelligence query (MISP)
+
+	import requests
+	
+	# Set the MISP instance URL and the API key
+	misp_url = "https://misp-instance.local"
+	api_key = "YOUR_MISP_API_KEY"
+	
+	# Search for a specific indicator (e.g., a suspicious IP)
+	indicator = "192.168.1.1"
+	search_url = f"{misp_url}/attributes/restSearch"
+	
+	# Make the request to the MISP API
+	response = requests.post(search_url, headers={"Authorization": api_key}, json={"value": indicator})
+	
+	# Print the results
+	if response.status_code == 200:
+	    print("IOC found:", response.json())
+	else:
+	    print("Error:", response.status_code)
+
+
+

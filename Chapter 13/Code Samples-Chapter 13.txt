@@ -1,0 +1,212 @@
+Code Sample 1:-
+
+# Integration of EDR Telemetry with SIEM
+
+	import requests
+	
+	# Falcon API credentials
+	CLIENT_ID = "your-client-id"
+	CLIENT_SECRET = "your-client-secret"
+	BASE_URL = "https://api.crowdstrike.com"
+	
+	# Authenticate and retrieve an access token
+	def get_access_token():
+	    url = f"{BASE_URL}/oauth2/token"
+	    data = {"client_id": CLIENT_ID, "client_secret": CLIENT_SECRET}
+	    response = requests.post(url, data=data)
+	    if response.status_code == 200:
+	        return response.json().get("access_token")
+	    else:
+	        raise Exception(f"Authentication failed: {response.json()}")
+	
+	# Fetch detections from Falcon API
+	def fetch_detections(access_token):
+	    headers = {"Authorization": f"Bearer {access_token}"}
+	    url = f"{BASE_URL}/detects/queries/detects/v1"
+	    response = requests.get(url, headers=headers)
+	    if response.status_code == 200:
+	        return response.json().get("resources", [])
+	    else:
+	        raise Exception(f"Failed to fetch detections: {response.json()}")
+	
+	# Send alerts to a SIEM system
+	def send_to_siem(detections):
+	    siem_url = "https://your-siem-endpoint.com/api/alerts"
+	    for detection in detections:
+	        alert = {
+	            "id": detection,
+	            "source": "CrowdStrike Falcon",
+	            "type": "Detection",
+	            "status": "Open",
+	        }
+	        response = requests.post(siem_url, json=alert)
+	        print(f"Sent alert to SIEM: {response.status_code}")
+	
+	# Main execution
+	try:
+	    token = get_access_token()
+	    detections = fetch_detections(token)
+	    send_to_siem(detections)
+	except Exception as e:
+	    print(f"Error: {e}")
+
+
+Code Sample 2:-
+
+# Analyzing network traffic with Zeek
+
+1.	Install and Configure Zeek:
+a.	Install Zeek on a Linux system using package managers like apt or yum.
+b.	Start the Zeek process to monitor a specific network interface.
+1.	sudo zeek -i eth0
+
+2.	Customize the Zeek Script for HTTP Monitoring: Save the following script as http-traffic.zeek to analyze HTTP traffic and log suspicious activity.
+1.	event http_request(c: connection, method: string, original_URI: string, version: string) {
+2.	    if (method == "POST" && /sensitive/.match(original_URI)) {
+3.	        print fmt("ALERT: Sensitive POST request detected: %s", original_URI);
+4.	    }
+5.	}
+
+3.	Run the script: Execute Zeek with the custom script to monitor and analyze traffic.
+1.	sudo zeek -r network_traffic.pcap http-traffic.zeek
+
+
+
+Code Sample 3:- 
+
+# Adversary Emulation with MITRE Caldera
+
+# Install Caldera: Install the platform and set up the server.
+	git clone https://github.com/mitre/caldera.git
+	cd caldera
+	pip install -r requirements.txt
+	python server.py --insecure
+
+# Create an adversary profile: Write a JSON configuration to emulate an adversary using the T1082 tactic (System Information Discovery).
+	{
+	  "adversary_id": "example_adversary",
+	  "name": "System Discovery",
+	  "description": "Simulates system discovery techniques",
+	  "atomic_ordering": ["T1082"]
+	}
+
+
+Code Sample 4:-
+
+# IOC Analysis script
+
+	# Define the path to the log file
+	log_file = "network_logs.txt"
+	
+	# Define known IOCs (Indicators of Compromise)
+	iocs = {
+	    "ip_addresses": ["192.168.1.100", "203.0.113.50"],
+	    "file_hashes": ["d41d8cd98f00b204e9800998ecf8427e", "44d88612fea8a8f36de82e1278abb02f"]
+	}
+	
+	# Function to search for IOCs in logs
+	def search_iocs(log_file, iocs):
+	    try:
+	        with open(log_file, "r") as file:
+	            logs = file.readlines()
+	    except FileNotFoundError:
+	        print(f"Error: Log file '{log_file}' not found.")
+	        return None
+	
+	    matches = {"ip_addresses": [], "file_hashes": []}
+	    for log in logs:
+	        # Check if any IP matches the log entry
+	        if any(ip in log for ip in iocs["ip_addresses"]):
+	            matches["ip_addresses"].append(log.strip())
+	        # Check if any file hash matches the log entry
+	        if any(hash in log for hash in iocs["file_hashes"]):
+	            matches["file_hashes"].append(log.strip())
+	    return matches
+# Optional Extension to save matches to a file:
+	# Save matches to a file
+	output_file = "ioc_matches.txt"
+	with open(output_file, "w") as outfile:
+	    for category, entries in matches_found.items():
+	        outfile.write(f"{category.upper()}:\n")
+	        for entry in entries:
+	            outfile.write(entry + "\n")
+	        outfile.write("\n")
+	print(f"Matches saved to {output_file}.")
+
+
+Code Sample 5:-
+
+# Integrating Threat Intel API with SIEM
+
+	import requests
+	
+	# Example: Integrating Threat Intelligence API with SIEM
+	def enrich_threat_data(indicator):
+	    api_url = "https://threat-intel-platform/api/lookup"
+	    response = requests.post(api_url, json={"indicator": indicator})
+	    if response.status_code == 200:
+	        return response.json()
+	    else:
+	        return {"error": "Failed to fetch data"}
+	
+	# Test enrichment
+	threat = "192.168.1.1"
+	enriched_data = enrich_threat_data(threat)
+	print(f"Threat data: {enriched_data}")
+
+# Sample output: Assuming the Threat Intelligence API responds with the following JSON for the given indicator 192.168.1.1:
+	{
+	    "indicator": "192.168.1.1",
+	    "threat_level": "high",
+	    "category": "malware",
+	    "last_seen": "2024-12-01",
+	    "description": "Known C2 server for ransomware operations."
+	}
+
+# The output of the script would be:
+
+	Threat data: {'indicator': '192.168.1.1', 'threat_level': 'high', 'category': 'malware', 'last_seen': '2024-12-01', 'description': 'Known C2 server for ransomware operations.'}
+
+
+
+Code sample 6:-
+
+# Automating email alerts using smtplib
+
+	import smtplib
+	from email.mime.text import MIMEText
+	from email.mime.multipart import MIMEMultipart
+	import os
+	
+	def send_email_alert(subject, message, recipients):
+	    smtp_server = "smtp.example.com"
+	    sender_email = "alert@example.com"
+	    sender_password = os.getenv("EMAIL_PASSWORD")  # Use environment variable for security
+	
+	    # Create MIME email
+	    msg = MIMEMultipart()
+	    msg['From'] = sender_email
+	    msg['To'] = ", ".join(recipients)
+	    msg['Subject'] = subject
+	    msg.attach(MIMEText(message, 'plain'))
+	
+	    try:
+	        with smtplib.SMTP(smtp_server, 587) as server:
+	            server.starttls()  # Secure the connection
+	            server.login(sender_email, sender_password)  # Use secure password
+	            server.sendmail(sender_email, recipients, msg.as_string())
+	        print("Alert sent successfully!")
+	    except smtplib.SMTPException as e:
+	        print(f"SMTP error: {e}")
+	    except Exception as e:
+	        print(f"Failed to send email: {e}")
+	
+	# Example usage
+	send_email_alert(
+	    "Threat Alert: Malware Detected",
+	    "A malware infection has been detected on endpoint X.",
+	    ["security_team@example.com"]
+	)
+
+
+

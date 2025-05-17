@@ -1,0 +1,62 @@
+Code Sample 1:-
+
+# Estimating financial loss cost
+
+def calculate_financial_loss(direct_cost, regulatory_fines, remediation_cost):
+    return direct_cost + regulatory_fines + remediation_cost
+
+breach_cost = calculate_financial_loss(direct_cost=1000000, regulatory_fines=500000, remediation_cost=200000)
+print(f"Total Financial Loss: ${breach_cost}")
+
+
+
+Code Sample 2:-
+
+# Calculating downtime cost
+
+def calculate_downtime_cost(hourly_cost, downtime_hours):
+    return hourly_cost * downtime_hours
+
+downtime_cost = calculate_downtime_cost(hourly_cost=10000, downtime_hours=24)
+print(f"Total Downtime Cost: ${downtime_cost}")
+
+
+Code Sample 3:-
+
+# computation of regulatory fine:
+
+def calculate_regulatory_penalty(breach_scale, penalty_rate):
+    return breach_scale * penalty_rate
+
+fine = calculate_regulatory_penalty(breach_scale=1000000, penalty_rate=0.05)  # 5% penalty rate
+print(f"Penalty: ${fine} due to regulations")
+
+
+Code Sample 4:-
+
+# Estimating lost revenue from reputational damage is a rough approximation at best:
+
+def calculate_lost_revenue(customer_base, avg_customer_value, loss_percentage):
+    return customer_base * avg_customer_value * loss_percentage
+
+lost_revenue = calculate_lost_revenue(customer_base=100000, avg_customer_value=200, loss_percentage=0.10)  # 10% customer loss
+print(f"Estimated Lost Revenue: ${lost_revenue}")
+
+
+Code Sample 5: Prioritization with business context
+
+# how asset criticality can be used to adjust CVSS scores:
+
+def adjusted_risk_score(cvss_score, asset_criticality):
+    # Assign weight to asset criticality: High = 1.5, Medium = 1.2, Low = 1.0
+    weights = {'High': 1.5, 'Medium': 1.2, 'Low': 1.0}
+    return round(cvss_score * weights.get(asset_criticality, 1.0), 2)
+
+# Example scores
+cvss_score = 7.8  # Base CVSS score
+criticality = 'High'  # Asset criticality level
+
+# Calculate adjusted score
+adjusted_score = adjusted_risk_score(cvss_score, criticality)
+print(f"Adjusted Risk Score: {adjusted_score}")
+

@@ -1,0 +1,219 @@
+Code Sample 1:-
+
+# A sample detection of suspicious network activity using ML model
+
+	import pandas as pd
+	import numpy as np
+	from sklearn.ensemble import IsolationForest
+	
+	# Load network traffic data (example dataset)
+	df = pd.read_csv("network_traffic.csv")
+	
+	# Selecting relevant features (e.g., packet size, connection duration)
+	X = df[['packet_size', 'connection_duration', 'protocol']]
+	
+	# Train Isolation Forest model for anomaly detection
+	model = IsolationForest(contamination=0.01)  # Assume 1% of traffic is anomalous
+	model.fit(X)
+	
+	# Predict anomalies (outliers)
+	df['anomaly'] = model.predict(X)
+	
+	# Filter suspicious traffic
+	suspicious_traffic = df[df['anomaly'] == -1]
+	print(suspicious_traffic)
+
+
+Code Sample 2:-
+
+# basic malware detection model using TensorFlow and Keras
+
+	import tensorflow as tf
+	from tensorflow import keras
+	from tensorflow.keras.layers import Dense, Flatten
+	
+	# Define a simple neural network model
+	model = keras.Sequential([
+	    Flatten(input_shape=(20,)),  # Assume 20 feature inputs from malware dataset
+	    Dense(64, activation='relu'),
+	    Dense(32, activation='relu'),
+	    Dense(1, activation='sigmoid')  # Binary classification (malware or not)
+	])
+	
+	# Compile model
+	model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+	
+	# Train model on labeled malware dataset (X_train, y_train)
+	# model.fit(X_train, y_train, epochs=10, batch_size=32)
+
+
+Code Sample 3:-
+
+# following code defines a function detect_phishing that checks for phishing email keywords and returns a classification ("Phishing Detected" or "Email Safe"):
+
+	import re
+	
+	def detect_phishing(email_text):
+	    phishing_keywords = ["urgent", "account suspension", "verify now", "click here"]
+	    for word in phishing_keywords:
+	        if re.search(word, email_text, re.IGNORECASE):
+	            return "Phishing Detected"
+	    return "Email Safe"
+	
+	# Example usage
+	email_content = "Your account will be suspended unless you verify now!"
+	print(detect_phishing(email_content))
+
+
+Code Sample 4:-
+
+# Mermaid Graph for SOAR automation using AI
+
+	graph TD
+	    %% Define Security Tools
+	    subgraph S
+	        A["<b style='font-size:36px;'>SIEM</b>"] -->|1| F["<b style='font-size:36px;'>AI Engine</b><br>(<b style='font-size:36px;'>Anomaly Detection</b>,<br><b style='font-size:36px;'>Threat Prediction</b>,<br><b style='font-size:36px;'>Automated Decisioning</b>)"] 
+	        B["<b style='font-size:36px;'>Firewall</b>"] -->|2| F
+	        C["<b style='font-size:36px;'>EDR</b>"] -->|3| F
+	        D["<b style='font-size:36px;'>Threat Intel</b>"] -->|4| F
+	        E["<b style='font-size:36px;'>Vulnerability Scanner</b>"] -->|5| F
+	    end
+	
+	    %% AI Engine to SOAR Platform
+	    F -->|6| G["<b style='font-size:36px;'>SOAR Platform</b>"]
+	
+	    %% Define SOAR Platform Functions
+	    subgraph S
+	        G -->|7| H["<b style='font-size:36px;'>Playbook Automation</b>"]
+	        H -->|8| I["<b style='font-size:36px;'>Response Actions</b>"]
+	        I -->|9| J["<b style='font-size:36px;'>SIEM</b> <br>(<b style='font-size:36px;'>Update/Enrich</b>)"]
+	        I -->|10| K["<b style='font-size:36px;'>Firewall</b> <br>(<b style='font-size:36px;'>Block/Quarantine</b>)"]
+	        I -->|11| L["<b style='font-size:36px;'>EDR</b> <br>(<b style='font-size:36px;'>Isolate/Remediate</b>)"]
+	        I -->|12| M["<b style='font-size:36px;'>Notification</b> <br>(<b style='font-size:36px;'>Analyst/User</b>)"]
+	        I -->|13| N["<b style='font-size:36px;'>Vulnerability Scanner</b> <br>(<b style='font-size:36px;'>Trigger Scan</b>)"]
+	    end
+	
+	    %% Styling for Readability
+	    style F fill:#ccf,stroke:#000,stroke-width:3px,font-size:36px,font-weight:bold
+	    style G fill:#cff,stroke:#000,stroke-width:3px,font-size:36px,font-weight:bold
+	    %%style H,I fill:#eef,stroke:#000,stroke-width:3px,font-size:36px,font-weight:bold
+	    %%style A,B,C,D,E,J,K,L,M,N fill:#fff,stroke:#000,stroke-width:3px,font-size:36px,font-weight:bold
+	
+	    %% External Elements
+	    classDef external fill:#eee,stroke:#000,font-size:36px,font-weight:bold
+	    class A,B,C,D,E,J,K,L,M,N external
+	
+	    %% Improve Link Visibility
+	    linkStyle 0,1,2,3,4 stroke:#0aa,stroke-width:4px;
+	    linkStyle 5 stroke:#aa0,stroke-width:4px;
+	    linkStyle 6,7,8,9,10 stroke:#a00,stroke-width:4px;
+
+
+Code Sample 5:-
+
+# Kusto Query Language (KQL) to proactively search for indicators of compromise (IOCs).
+
+	SecurityEvent
+	| where EventID == 4625  // Failed login attempts
+	| where Account in ("admin", "security") // High-value accounts
+	| where RemoteIP in ("192.168.1.100", "203.0.113.5") // Known malicious IPs
+	| summarize FailedAttempts = count() by Account, RemoteIP, bin(TimeGenerated, 1h)
+	| where FailedAttempts > 5 // Detect multiple failed logins within 1 hour
+	| order by FailedAttempts desc
+
+
+Code Sample 6:-
+
+# Solidity smart contract that securely stores a hash of a document on the blockchain, ensuring data integrity.
+
+	// SPDX-License-Identifier: MIT
+	pragma solidity ^0.8.0;
+	
+	contract SecureDataStorage {
+	    mapping(string => bytes32) private documentHashes;
+	    
+	    // Store document hash securely
+	    function storeDocument(string memory docID, string memory content) public {
+	        documentHashes[docID] = keccak256(abi.encodePacked(content));
+	    }
+	
+	    // Verify document integrity
+	    function verifyDocument(string memory docID, string memory content) public view returns (bool) {
+	        return documentHashes[docID] == keccak256(abi.encodePacked(content));
+	    }
+	}
+
+
+
+Code Sample 7:-
+
+# Mermaid flowchart for BlockChain secure data storage
+
+	graph LR
+	    A[Node 1] --> B{Distributed Ledger}
+	    B --> C[Node 2]
+	    B --> D[Node 3]
+	    B --> E[Node 4]
+	    B --> F[Node 5]
+	    
+	    subgraph Cryptographic Hashing
+	        B --> G[Hash Function]
+	        G --> H["Hash Value (Immutable)"] 
+	    end
+	
+	    style B fill:#ccf,stroke:#888,stroke-width:2px
+	    style G fill:#ccf,stroke:#888,stroke-width:2px
+	    style H fill:#ccf,stroke:#888,stroke-width:2px
+	
+	    classDef external fill:#eee,stroke:#888 
+	    class A,C,D,E,F external
+	
+	    linkStyle 0,1,2,3,4 stroke:#0aa,stroke-width:2px;
+	    linkStyle 5 stroke:#aa0,stroke-width:2px;
+	    linkStyle 6 stroke:#a00,stroke-width:2px;
+
+
+Code Sample 8:-
+
+# Flowchart for Quantum Computing impact on Cybersecurity
+
+	graph LR
+	    %% Classical Computing and its Challenges
+	    A["<b style='font-size:36px;'>Classical Computing</b>"] --> B["<b style='font-size:36px;'>Cybersecurity Challenges</b>"]
+	    B --> C["<b style='font-size:36px;'>Encryption Breaking</b>"]
+	    B --> D["<b style='font-size:36px;'>Supply Chain Attacks</b>"]
+	    B --> E["<b style='font-size:36px;'>AI/ML Security Risks</b>"]
+	
+	    %% Quantum Computing Solutions
+	    A --> F["<b style='font-size:36px;'>Quantum Computing</b>"]
+	    F --> G["<b style='font-size:36px;'>Enhanced Encryption</b>"]
+	    F --> H["<b style='font-size:36px;'>New Cryptographic Algorithms</b>"]
+	    F --> I["<b style='font-size:36px;'>Quantum Key Distribution (QKD)</b>"]
+	    
+	    %% Quantum Resistance
+	    F --> J["<b style='font-size:36px;'>Quantum-Resistant Algorithms</b>"]
+	    J --> B
+	
+	    %% Connections to Challenges
+	    G --> C
+	    H --> C
+	    I --> D
+	
+	    %% Quantum Machine Learning
+	    F --> K["<b style='font-size:36px;'>Quantum Machine Learning</b>"]
+	    K --> E 
+	
+	    %% Styling for Readability
+	    style F fill:#ccf,stroke:#000,stroke-width:3px,font-size:36px,font-weight:bold
+	    style K fill:#ccf,stroke:#000,stroke-width:3px,font-size:36px,font-weight:bold
+	    %%style G,H,I,J fill:#eef,stroke:#000,stroke-width:3px,font-size:20px,font-weight:bold
+	    %%style A,B,C,D,E fill:#fff,stroke:#000,stroke-width:3px,font-size:20px,font-weight:bold
+	
+	    %% External Elements
+	    classDef external fill:#eee,stroke:#000,font-size:36px,font-weight:bold
+	    class A,B,C,D,E external
+	
+	    %% Improve Link Visibility
+	    linkStyle 0,1,2,3,4 stroke:#0aa,stroke-width:4px;
+	    linkStyle 5,6,7,8,9,10,11,12,13 stroke:#aa0,stroke-width:4px;
+

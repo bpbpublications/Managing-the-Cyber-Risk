@@ -1,0 +1,192 @@
+Code Sample 1:-
+
+# Automated Alert Parsing
+
+	import json
+	
+	# Function to parse and process alert data
+	def parse_alerts(alerts_file):
+	    """
+	    Reads a JSON file containing alerts, filters critical alerts, 
+	    and prints the details of each critical alert.
+	    """
+	    # Open and load the JSON file containing alert data
+	    with open(alerts_file, 'r') as file:
+	        alerts = json.load(file)  # Load alerts into a Python list
+	
+	    # Filter alerts with severity marked as 'Critical'
+	    critical_alerts = [alert for alert in alerts if alert['severity'] == 'Critical']
+	
+	    # Print details of each critical alert
+	    for alert in critical_alerts:
+	        print(f"Critical Alert: {alert['message']}, Source: {alert['source_ip']}")
+	
+	# Example usage of the function
+	# Provide the path to the JSON file containing alerts
+	parse_alerts('alerts.json')
+
+
+
+Code Sample 1.1:-
+
+# Sample Input file
+
+	[
+	    {
+	        "severity": "Critical",
+	        "message": "Data exfiltration detected",
+	        "source_ip": "192.168.1.10"
+	    },
+	    {
+	        "severity": "Medium",
+	        "message": "Malware found on endpoint",
+	        "source_ip": "192.168.1.15"
+	    }
+	]
+
+
+
+Code Sample 2:-
+
+# Parsing logs for malware indicators
+
+	# Import the regular expression module for pattern matching
+	import re
+	
+	# Function to parse and analyze log files
+	def parse_logs(log_file):
+	    """
+	    Reads a log file line by line, searches for malware-related keywords,
+	    and prints matching lines for further investigation.
+	    """
+	    try:
+	        # Open the log file for reading
+	        with open(log_file, 'r') as file:
+	            logs = file.readlines()  # Read all lines into a list
+	
+	        # Define a list of keywords to search for in logs
+	        malware_keywords = ["malware", "ransomware", "data breach", "exfiltration"]
+	
+	        print("Potential Issues Found:")
+	        # Iterate over each log line
+	        for log in logs:
+	            # Check if any keyword is present in the current log line
+	            if any(keyword in log.lower() for keyword in malware_keywords):
+	                print(f" - {log.strip()}")  # Print matching log lines
+	
+	    except FileNotFoundError:
+	        print(f"Error: The file '{log_file}' does not exist.")
+	    except Exception as e:
+	        print(f"An unexpected error occurred: {e}")
+	
+	# Example usage
+	# Provide the path to the log file for analysis
+	parse_logs('system_logs.txt')
+
+
+
+Code Sample 3:-
+
+# Removing Malicious process
+
+	import os
+	import subprocess
+	
+	# Function to list and terminate suspicious processes
+	def terminate_suspicious_processes(keyword):
+	    """
+	    Searches for processes containing the specified keyword in their name
+	    and attempts to terminate them.
+	    """
+	    try:
+	        processes = subprocess.check_output(['ps', 'aux'], universal_newlines=True)
+	        suspicious_processes = [line for line in processes.split('\n') if keyword in line.lower()]
+	
+	        print("Suspicious Processes Found:")
+	        for process in suspicious_processes:
+	            print(f" - {process}")
+	            pid = int(process.split()[1])
+	            os.kill(pid, 9)
+	            print(f"Process with PID {pid} terminated.")
+	
+	    except Exception as e:
+	        print(f"An error occurred: {e}")
+	
+	# Example usage
+	terminate_suspicious_processes('malware')
+
+
+
+Code Sample 4:-
+
+# Automating Backup
+
+	import os
+	import shutil
+	import datetime
+	
+	# Function to automate database backups
+	def backup_database(source_path, backup_dir):
+	    """
+	    Creates a timestamped backup of the database files.
+	    :param source_path: Path of database file or directory.
+	    :param backup_dir: Directory where backups will be stored.
+	    """
+	    try:
+	        # Provide a timestamp for the backup
+	        timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+	        # Construct backup file path
+	        backup_path = os.path.join(backup_dir, f"backup_{timestamp}")
+	        
+	        # Perform the backup
+	        if os.path.isfile(source_path):
+	            shutil.copy(source_path, backup_path)
+	            print(f"Backup created: {backup_path}")
+	        elif os.path.isdir(source_path):
+	            shutil.copytree(source_path, backup_path)
+	            print(f"Backup directory created: {backup_path}")
+	        else:
+	            print("Source path is invalid.")
+	    except Exception as e:
+	        print(f"An error occurred during backup: {e}")
+	
+	# Example usage
+	source = '/path/to/database'
+	backup_location = '/path/to/backup/directory'
+	backup_database(source, backup_location)
+
+
+
+Code Sample 5:-
+
+# Simulated Alert Generation
+
+	import random
+	import time
+	
+	# Function to simulate a security alert
+	def generate_alert():
+	    """
+	    Simulates the generation of a random security alert for testing purposes.
+	    """
+	    alert_types = ["Malware Detected", "Suspicious Login Attempt", "Data Exfiltration Attempt", 
+	                   "Unauthorized Access to Database", "Phishing Attack Detected"]
+	    alert_type = random.choice(alert_types)
+	    severity_level = random.choice(["Low", "Medium", "High", "Critical"])
+	    alert = {
+	        "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+	        "alert_type": alert_type,
+	        "severity": severity_level,
+	        "message": f"Alert of type '{alert_type}' with severity '{severity_level}' generated."
+	    }
+	    return alert
+	
+	# Function to print simulated alerts
+	def simulate_alerts(num_alerts=5):
+	    for _ in range(num_alerts):
+	        alert = generate_alert()
+	        print(f"[{alert['timestamp']}] {alert['alert_type']} - {alert['severity']}: {alert['message']}")
+	        time.sleep(2)
+	
+	# Simulate 10 alerts
+	simulate_alerts(10)

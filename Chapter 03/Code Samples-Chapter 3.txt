@@ -1,0 +1,241 @@
+Code Sample 1:- Python
+# Python example showing how AI might analyze email patterns
+
+	import openai
+	
+	# OpenAI API key
+	openai.api_key = 'YOUR_API_KEY'
+	
+	# Function to generate phishing email text
+	def generate_phishing_email(target):
+	    prompt = f"Craft a phishing email for {target} to make it look authentic."
+	    response = openai.Completion.create(
+	        engine="text-davinci-002",
+	        prompt=prompt,
+	        max_tokens=150
+	    )
+	    return response.choices[0].text.strip()
+	
+	# Generate a phishing email for a target
+	target = "john.doe@example.com"
+	phishing_email = generate_phishing_email(target)
+	print(f"Phishing Email for {target}:\n{phishing_email}")
+
+
+Code Sample 2:- 
+
+# Using AI to predict exploitability of Vulnerabilities
+
+	from sklearn.feature_extraction.text import TfidfVectorizer
+	from sklearn.linear_model import LogisticRegression
+	
+	# Sample data: descriptions of vulnerabilities
+	data = [
+	    "SQL Injection in user login form",
+	    "Buffer overflow in image processing",
+	    "Cross-site scripting in comments section"
+	]
+	
+	# Feature extraction
+	vectorizer = TfidfVectorizer()
+	X = vectorizer.fit_transform(data)
+	
+	# Simple model to predict exploitability
+	model = LogisticRegression()
+	model.fit(X, [1, 1, 0])  # 1 = high risk, 0 = low risk
+	
+	# Predict the risk of a new vulnerability
+	new_vuln = vectorizer.transform(["SQL Injection in payment gateway"])
+	risk_prediction = model.predict(new_vuln)
+	print("Risk Level:", "High" if risk_prediction[0] else "Low")
+
+
+Code Sample 3:-
+
+# Common misconfiguration scenario in cloud
+
+	import boto3
+	
+	# Initialize a session using Amazon S3
+	s3 = boto3.client('s3')
+	
+	# Incorrectly configuring bucket policy
+	bucket_policy = {
+	    "Version": "2012-10-17",
+	    "Statement": [
+	        {
+	            "Effect": "Allow",
+	            "Principal": "*",
+	            "Action": "s3:GetObject",
+	            "Resource": "arn:aws:s3:::mybucket/*"
+	        }
+	    ]
+	}
+	
+	# Apply the policy to the bucket
+	response = s3.put_bucket_policy(
+	    Bucket='mybucket',
+	    Policy=json.dumps(bucket_policy)
+	)
+	print("Bucket policy applied:", response)
+
+
+Code Sample 4:- 
+
+#Checking overprivileged IAM users
+
+	import boto3
+	
+	# List IAM users with overprivileged access
+	iam = boto3.client('iam')
+	
+	users = iam.list_users()
+	for user in users['Users']:
+	    policies = iam.list_user_policies(UserName=user['UserName'])
+	    for policy in policies['PolicyNames']:
+	        print(f"User: {user['UserName']}, Policy: {policy}")
+
+
+Code Sample 5:-
+
+# Securing IoT devices
+
+	import paramiko
+	import logging
+	import time
+	
+	def update_device_firmware(ip, username, password, firmware_path):
+	    ssh = paramiko.SSHClient()
+	    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	
+	    try:
+	        ssh.connect(ip, username=username, password=password)
+	        logging.info(f"Connected to device {ip}")
+	
+	        sftp = ssh.open_sftp()
+	        logging.info(f"Transferring firmware to {ip}")
+	        sftp.put(firmware_path, '/tmp/firmware.bin')
+	        sftp.close()
+	
+	        stdin, stdout, stderr = ssh.exec_command('sudo /usr/bin/update_firmware /tmp/firmware.bin')
+	
+	        # Add progress tracking here, e.g., using tqdm
+	        for line in iter(stdout.readline, b''):
+	            print(line.strip().decode())
+	
+	        # Handle command output and errors
+	        exit_status = stdout.channel.recv_exit_status()
+	        if exit_status != 0:
+	            logging.error(f"Firmware update failed on {ip}: {stderr.read().decode()}")
+	        else:
+	            logging.info(f"Firmware update successful on {ip}")
+	
+	    except Exception as e:
+	        logging.error(f"Error updating firmware on {ip}: {str(e)}")
+	
+	    finally:
+	        ssh.close()
+	
+	# Set up logging
+	logging.basicConfig(filename='firmware_update.log', level=logging.INFO)
+	
+	# Example usage with secure password handling (consider using a password manager or configuration file)
+	ip = '192.168.1.100'
+	username = 'admin'
+	# password = 'securepassword'  # Avoid storing passwords in plain text
+	firmware_path = 'path/to/firmware.bin'
+	
+	update_device_firmware(ip, username, password, firmware_path)
+
+
+Code Sample 6:-
+
+# Detecting IoT botnets
+
+	import scapy.all as scapy
+	
+	def detect_botnet_traffic(interface):
+	    def packet_callback(packet):
+	        if packet.haslayer(scapy.IP):
+	            ip_layer = packet.getlayer(scapy.IP)
+	            if ip_layer.src in known_botnet_ips:
+	                print(f'Botnet activity detected from {ip_layer.src}')
+	    
+	    scapy.sniff(iface=interface, prn=packet_callback, store=0)
+	
+	# Known botnet IP addresses (example)
+	known_botnet_ips = ['192.168.1.50', '192.168.1.51']
+	
+	# Example usage
+	interface = 'wlan0'
+	detect_botnet_traffic(interface)
+
+
+Code sample 7:-
+
+# Using AWS IAM to secure cloud resources
+
+	import boto3
+	
+	def create_iam_user(user_name):
+	    iam = boto3.client('iam')
+	    response = iam.create_user(UserName=user_name)
+	    print(f'Created IAM user: {response["User"]["UserName"]}')
+	    return response
+	
+	def attach_policy_to_user(user_name, policy_arn):
+	    iam = boto3.client('iam')
+	    iam.attach_user_policy(UserName=user_name, PolicyArn=policy_arn)
+	    print(f'Attached policy {policy_arn} to user {user_name}')
+	
+	# Example usage
+	user_name = 'new_user'
+	policy_arn = 'arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess'
+	
+	create_iam_user(user_name)
+	attach_policy_to_user(user_name, policy_arn)
+
+
+
+Code Sample 8:-
+
+# Implementing Zero Trust Model
+
+	def verify_access(user, resource):
+	    # Mock verification process
+	    if user in authorized_users and resource in user.accessible_resources:
+	        return True
+	    return False
+	
+	authorized_users = ["alice", "bob"]
+	requested_user = "alice"
+	requested_resource = "sensitive_data"
+	
+	if verify_access(requested_user, requested_resource):
+	    print("Access granted.")
+	else:
+	    print("Access denied.")
+
+
+Code Sample 9:-
+
+# AI driven intrusion detection system
+
+	from sklearn.ensemble import RandomForestClassifier
+	from sklearn.model_selection import train_test_split
+	from sklearn.metrics import classification_report
+	
+	# Sample data (features and labels)
+	X = [[0.1, 0.2, 0.3], [0.4, 0.5, 0.6], [0.7, 0.8, 0.9]]
+	y = [0, 1, 0]
+	
+	# Splitting the data into training and testing sets
+	X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+	
+	# Training the RandomForest model
+	clf = RandomForestClassifier()
+	clf.fit(X_train, y_train)
+	
+	# Making predictions
+	y_pred = clf.predict(X_test)
+	print(classification_report(y_test, y_pred))
